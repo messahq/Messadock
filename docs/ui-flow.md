@@ -272,4 +272,112 @@ makefile
 Copy code
 
 **Description:**
-Added ui-flow.md containing final Dock registration, Lobby, TEXT/VOICE, Orb, and mobile UX specifications. Ready for Klod implementation.
+Added ui-flow.md containing final Dock registration, Lobby, TEXT/VOICE, Orb, and mobile UX specifications. Ready for Klod implementation. ## Dock Registration Flow v1 — IMPLEMENTED
+
+Status: Completed
+Implementation: 2025-12
+Developer: Klod
+Architecture Reference:
+
+core-principles.md
+
+docs/developer-handbook-v1.md
+
+### 1. Overview
+
+A Dock Registration Flow v1 az első teljes, stabil regisztrációs folyamat a Messadock rendszerben.
+Ez a flow biztosítja, hogy:
+
+az új felhasználók egyszerűen, gyorsan létrehozzák a Dock-profiljukat
+
+a rendszer megjegyzi a regisztrációt
+
+a jövőben automatikusan a Dock főképernyőre navigál a felhasználó
+
+a Lobby Orb viselkedése következetes a core logikával
+
+Ez a verzió megfelel a Messadock stabil alapelveinek (core-principles).
+
+### 2. User State Logic
+
+A regisztráció állapotát a useUserStore kezeli (Zustand + AsyncStorage):
+
+isRegistered: boolean
+
+profile: { name, email?, country?, status? }
+
+loadUser() – app indításakor beolvassa az állapotot
+
+register(profile) – elmenti a felhasználót és aktiválja a Dockot
+
+logout() – fejlesztői / debug funkció a profil törlésére
+
+Storage key: @messadock_user
+
+### 3. Flow Specification (Implemented)
+Lobby Orb Tap
+isRegistered === false → RegistrationScreen
+isRegistered === true  → DockMain
+
+RegistrationScreen
+
+Mezők:
+
+Name (kötelező)
+
+Email (opcionális)
+
+Country (opcionális)
+
+Status/Role (opcionális)
+
+Viselkedés:
+
+“Enter Dock” gomb csak akkor aktív, ha Name ki van töltve
+
+regisztrációkor a userStore menti az adatokat
+
+sikeres mentés után: navigation.replace("DockMain")
+
+Mobil stabilitás:
+
+SafeAreaView
+
+KeyboardAvoidingView
+
+ScrollView
+
+### 4. Navigation
+
+A navigációs struktúra a következő logikával készült:
+
+if (!isRegistered) {
+  Screens: Lobby, Registration
+} else {
+  Screen: DockMain
+}
+
+
+Ez a core-principles dokumentumban meghatározott modell teljes implementációja:
+
+Lobby → Orb → Registration → DockMain
+
+### 5. Implementation Files
+
+src/state/userStore.ts
+
+src/screens/RegistrationScreen.tsx
+
+src/navigation/index.tsx
+
+src/screens/LobbyScreen.tsx (Orb tap logika)
+
+### 6. Version Notes (v1)
+
+Backend integráció NEM része (későbbi verzióban érkezik)
+
+Personal Continuum logika később kapcsolódik
+
+Kanada Full Access logika még nincs aktiválva
+
+A flow jelen állapotában teljesen stabil és gyártásra kész
