@@ -1,4 +1,4 @@
-# Messadock
+ # Messadock
 
 Messadock Sandor személyes Dock rendszere, amely a Messa AI-ra épül.  
 Ez a repo tartalmazza a Dock app logikáját, UX-terveit és a BuildUnionnal való kapcsolódást.
